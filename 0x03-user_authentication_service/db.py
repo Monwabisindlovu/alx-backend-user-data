@@ -32,11 +32,11 @@ class DB:
 
     def add_user(self, email: str, hashed_password: str) -> User:
         """Add a user to the database.
-        
+
         Args:
             email (str): The email of the user.
             hashed_password (str): The hashed password of the user.
-        
+
         Returns:
             User: The User instance created and added to the database.
         """
@@ -47,42 +47,42 @@ class DB:
 
     def find_user_by(self, **kwargs) -> User:
         """Find a user by arbitrary keyword arguments.
-        
+
         Args:
             kwargs: Arbitrary keyword arguments to filter users.
-        
+
         Returns:
             User: The first User instance found.
-        
+
         Raises:
             NoResultFound: If no user is found.
             InvalidRequestError: If invalid query arguments are passed.
         """
         if not kwargs:
             raise InvalidRequestError("No arguments provided")
-        
+
         query = self._session.query(User)
         for key, value in kwargs.items():
             if not hasattr(User, key):
                 raise InvalidRequestError(f"Invalid attribute: {key}")
             query = query.filter(getattr(User, key) == value)
-        
+
         user = query.first()
         if user is None:
             raise NoResultFound("No result found for the given arguments")
-        
+
         return user
 
     def update_user(self, user_id: int, **kwargs) -> None:
         """Update a user's attributes.
-        
+
         Args:
             user_id (int): The ID of the user to update.
             kwargs: Arbitrary keyword arguments of attributes to update.
-        
+
         Returns:
             None
-        
+
         Raises:
             ValueError: If an invalid attribute is provided.
         """
